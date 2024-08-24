@@ -34,7 +34,7 @@ const userLogin = async (data: ILoginUser) => {
     config.JWT_ACCESS_SECRET as string,
     config.JWT_ACCESS_EXPIRES_IN as string
   );
-  console.log(accessToken);
+
   return accessToken;
 };
 

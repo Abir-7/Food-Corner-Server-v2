@@ -40,7 +40,6 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
       },
     ];
   } else if (err instanceof AppError) {
-    console.log("gg");
     statusCode = err.statusCode;
     message = err.message;
     errorSources = [

@@ -8,7 +8,6 @@ import config from "../../config";
 import { User } from "../../modules/Users/user.model";
 
 export const auth = (...userRoles: TUserRole[]) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const token = req.headers.authorization;
 
@@ -37,7 +36,7 @@ export const auth = (...userRoles: TUserRole[]) => {
     if (isBlocked) {
       throw new AppError(httpStatus.FORBIDDEN, "This user is Blocked!");
     }
-    console.log(role, role);
+
     if (userRoles && !userRoles.includes(role)) {
       throw new AppError(httpStatus.UNAUTHORIZED, "You are not authorized!!");
     }
