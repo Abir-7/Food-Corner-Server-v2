@@ -9,7 +9,15 @@ const app = express();
 
 app.use(express.json());
 app.use(cookiePerser());
-app.use(cors());
+
+const corsOptions = {
+  origin: ["http://localhost:5173"],
+  methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 app.use("/api/v1", router);
 
 app.get("/", (req, res) => {
