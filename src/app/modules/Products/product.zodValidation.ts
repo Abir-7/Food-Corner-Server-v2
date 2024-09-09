@@ -15,9 +15,24 @@ export const zodProductSchema = z.object({
       required_error: "Category is required.",
       invalid_type_error: "Category must be string.",
     }),
-    price: z.number({
-      required_error: "Price is required.",
-      invalid_type_error: "Price must be number.",
+    price: z.array(
+      z.object({
+        price: z.number({
+          required_error: "Price is required.",
+          invalid_type_error: "Price must be number.",
+        }),
+        size: z.union([
+          z.number({
+            required_error: "Size is required.",
+            invalid_type_error: "Size must be number.",
+          }),
+          z.literal("Reguler"),
+        ]),
+      })
+    ),
+    cuisine: z.string({
+      required_error: "Cuisine is required.",
+      invalid_type_error: "Cuisine must be string.",
     }),
     status: z.object({
       inStock: z.boolean().optional(),
@@ -26,9 +41,16 @@ export const zodProductSchema = z.object({
         invalid_type_error: "Quantity must be string",
       }),
     }),
-    availableFor: z.enum(productAvailableFor, {
-      required_error: "Available time is required.",
-      invalid_type_error: "Available time must be string.",
+    availableFor: z.object({
+      Breakfast: z.boolean({
+        required_error: "Breakfast availability is required.",
+      }),
+      Dinner: z.boolean({
+        required_error: "Dinner availability is required.",
+      }),
+      Lunch: z.boolean({
+        required_error: "Lunch availability is required.",
+      }),
     }),
   }),
 });

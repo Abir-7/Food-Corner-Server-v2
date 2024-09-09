@@ -1,6 +1,6 @@
 import { model, Schema } from "mongoose";
 import { IProduct, ProductModel } from "./product.interface";
-import { productAvailableFor } from "./product.const";
+import { productCategory } from "./product.const";
 
 const productSchema = new Schema<IProduct, ProductModel>(
   {
@@ -17,19 +17,41 @@ const productSchema = new Schema<IProduct, ProductModel>(
     },
     category: {
       type: String,
-      enum: ["Rice"],
+      enum: productCategory,
       required: [true, "Category is required"],
     },
-    availableFor: {
+    photo: {
       type: String,
-      enum: productAvailableFor,
-      required: [true, "Available time is required"],
+      required: [true, "Photo is required"],
     },
-    price: {
-      type: Number,
-      required: [true, "Price is required"],
-      min: [0, "Price must be a positive number"],
+    availableFor: {
+      Breakfast: {
+        type: Boolean,
+        required: [true, "Breakfast availability is required"],
+      },
+      Dinner: {
+        type: Boolean,
+        required: [true, "Dinner availability is required"],
+      },
+      Lunch: {
+        type: Boolean,
+        required: [true, "Lunch availability is required"],
+      },
     },
+    price: [
+      {
+        price: {
+          type: Number,
+          required: [true, "Price is required"],
+          min: [0, "Price must be a positive number"],
+        },
+        size: {
+          type: Schema.Types.Mixed,
+          // Allows both number and string ("reguler")
+          required: [true, "Size is required"],
+        },
+      },
+    ],
     status: {
       inStock: {
         type: Boolean,
@@ -39,6 +61,10 @@ const productSchema = new Schema<IProduct, ProductModel>(
         type: Number,
         required: [true, "Available Quantity is required"],
       },
+    },
+    cuisine: {
+      type: String,
+      required: [true, "Cuisine is required"],
     },
     isDeleted: { type: Boolean, default: false },
   },
