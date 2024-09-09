@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { productAvailableFor, productCategory } from "./product.const";
+import { productAvailableFor, productCategory } from "./item.const";
 
 export const zodProductSchema = z.object({
   body: z.object({

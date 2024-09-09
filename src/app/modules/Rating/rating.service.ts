@@ -5,7 +5,7 @@ import { IAuthUserInfo } from "../../interface/global.interface";
 import { Customer } from "../Customers/custommer.model";
 import { AppError } from "../../Errors/AppError";
 import httpStatus from "http-status";
-import { Product } from "../Products/product.model";
+import { Product } from "../MenuItem/item.model";
 
 const addRatingIntoDb = async (
   data: IRating,

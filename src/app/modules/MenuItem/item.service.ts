@@ -1,19 +1,19 @@
 import httpStatus from "http-status";
 import { AppError } from "../../Errors/AppError";
-import { IProduct } from "./product.interface";
-import { Product } from "./product.model";
+import { IProduct } from "./item.interface";
+import { Product } from "./item.model";
 
-const createProductIntoDB = async (productData: IProduct) => {
+const createItemIntoDB = async (productData: IProduct) => {
   const result = await Product.create(productData);
   return result;
 };
 
-const getAllProductFromDB = async () => {
+const getAllItemFromDB = async () => {
   const result = await Product.find({ isDeleted: false });
   return result;
 };
 
-const getSingleProductFromDB = async (id: string) => {
+const getSingleItemFromDB = async (id: string) => {
   const isProductExist = await Product.isProductExist(id);
   if (!isProductExist) {
     throw new AppError(
@@ -32,7 +32,7 @@ const getSingleProductFromDB = async (id: string) => {
   return result;
 };
 
-const updateProductFromDB = async (id: string, data: Partial<IProduct>) => {
+const updateItemFromDB = async (id: string, data: Partial<IProduct>) => {
   const isProductExist = await Product.isProductExist(id);
   if (!isProductExist) {
     throw new AppError(
@@ -54,7 +54,7 @@ const updateProductFromDB = async (id: string, data: Partial<IProduct>) => {
   });
   return result;
 };
-const deleteProductFromDB = async (id: string) => {
+const deleteItemFromDB = async (id: string) => {
   const isProductExist = await Product.isProductExist(id);
   if (!isProductExist) {
     throw new AppError(
@@ -75,9 +75,9 @@ const deleteProductFromDB = async (id: string) => {
 };
 
 export const productService = {
-  createProductIntoDB,
-  getAllProductFromDB,
-  updateProductFromDB,
-  deleteProductFromDB,
-  getSingleProductFromDB,
+  createItemIntoDB,
+  getAllItemFromDB,
+  updateItemFromDB,
+  deleteItemFromDB,
+  getSingleItemFromDB,
 };

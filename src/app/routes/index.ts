@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { productRouter } from "../modules/Products/product.route";
+import { productRouter } from "../modules/MenuItem/item.route";
 import { userRouter } from "../modules/Users/user.route";
 import { authRouter } from "../modules/Auth/auth.route";
 import { customerRoute } from "../modules/Customers/customer.route";
@@ -10,7 +10,7 @@ import { ratingRouter } from "../modules/Rating/rating.route";
 const router = Router();
 
 const moduleRoutes = [
-  { path: "/product", route: productRouter },
+  { path: "/menu-item", route: productRouter },
   { path: "/user", route: userRouter },
   { path: "/customer", route: customerRoute },
   { path: "/auth", route: authRouter },

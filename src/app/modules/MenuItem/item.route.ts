@@ -1,40 +1,37 @@
 import { Router } from "express";
-import { productController } from "./product.controller";
+import { productController } from "./item.controller";
 
-import {
-  zodProductSchema,
-  zodProductUpdateSchema,
-} from "./product.zodValidation";
+import { zodProductSchema, zodProductUpdateSchema } from "./item.zodValidation";
 import validateRequest from "../../middlewares/zodValidator";
 //import { auth } from "../../middlewares/auth/auth";
 
 const router = Router();
 
 router.post(
-  "/add-product",
+  "/add-item",
   //auth("admin"),
   validateRequest(zodProductSchema),
-  productController.createProduct
+  productController.createItem
 );
 router.patch(
   "/:id",
   //auth("admin"),
   validateRequest(zodProductUpdateSchema),
-  productController.updateProduct
+  productController.updateItem
 );
 
 router.delete(
   "/:id",
   //auth("admin"),
-  productController.deleteProduct
+  productController.deleteItem
 );
 
 router.get(
   "/:id",
   //auth("admin"),
-  productController.getSingleProduct
+  productController.getSingleItem
 );
 
-router.get("/", productController.getAllProduct);
+router.get("/", productController.getAllItem);
 
 export const productRouter = router;

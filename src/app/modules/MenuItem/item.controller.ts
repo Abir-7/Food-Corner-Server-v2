@@ -1,10 +1,10 @@
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
-import { productService } from "./product.service";
+import { productService } from "./item.service";
 
-const createProduct = catchAsync(async (req, res) => {
+const createItem = catchAsync(async (req, res) => {
   const data = req.body;
-  const result = await productService.createProductIntoDB(data);
+  const result = await productService.createItemIntoDB(data);
   sendResponse(res, {
     data: result,
     statusCode: 200,
@@ -13,8 +13,8 @@ const createProduct = catchAsync(async (req, res) => {
   });
 });
 
-const getAllProduct = catchAsync(async (req, res) => {
-  const result = await productService.getAllProductFromDB();
+const getAllItem = catchAsync(async (req, res) => {
+  const result = await productService.getAllItemFromDB();
   sendResponse(res, {
     data: result,
     statusCode: 200,
@@ -23,9 +23,9 @@ const getAllProduct = catchAsync(async (req, res) => {
   });
 });
 
-const getSingleProduct = catchAsync(async (req, res) => {
+const getSingleItem = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const result = await productService.getSingleProductFromDB(id);
+  const result = await productService.getSingleItemFromDB(id);
   sendResponse(res, {
     data: result,
     statusCode: 200,
@@ -34,10 +34,10 @@ const getSingleProduct = catchAsync(async (req, res) => {
   });
 });
 
-const updateProduct = catchAsync(async (req, res) => {
+const updateItem = catchAsync(async (req, res) => {
   const { id } = req.params;
   const data = req.body;
-  const result = await productService.updateProductFromDB(id, data);
+  const result = await productService.updateItemFromDB(id, data);
   sendResponse(res, {
     data: result,
     statusCode: 200,
@@ -46,9 +46,9 @@ const updateProduct = catchAsync(async (req, res) => {
   });
 });
 
-const deleteProduct = catchAsync(async (req, res) => {
+const deleteItem = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const result = await productService.deleteProductFromDB(id);
+  const result = await productService.deleteItemFromDB(id);
   sendResponse(res, {
     data: result,
     statusCode: 200,
@@ -58,9 +58,9 @@ const deleteProduct = catchAsync(async (req, res) => {
 });
 
 export const productController = {
-  deleteProduct,
-  createProduct,
-  getAllProduct,
-  updateProduct,
-  getSingleProduct,
+  deleteItem,
+  createItem,
+  getAllItem,
+  updateItem,
+  getSingleItem,
 };
