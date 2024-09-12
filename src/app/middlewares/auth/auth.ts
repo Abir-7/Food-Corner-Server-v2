@@ -21,6 +21,7 @@ export const auth = (...userRoles: TUserRole[]) => {
       token,
       config.JWT_ACCESS_SECRET as string
     ) as JwtPayload;
+
     const { role, userEmail } = decoded;
 
     // checking if the user is exist

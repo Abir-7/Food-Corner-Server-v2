@@ -7,7 +7,7 @@ import { zodFavProductSchema } from "./favProduct.zodValidation";
 const router = Router();
 
 router.post(
-  "/addFavProduct",
+  "/add-fav-Product",
   auth("customer"),
   validateRequest(zodFavProductSchema),
   favProductController.addFavProduct

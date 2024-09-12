@@ -4,7 +4,7 @@ export interface IProduct {
   title: string;
   description: string;
   category: "Rice" | "Kabab";
-  price: { price: number; size: number | "Reguler" }[];
+  price: { price: number; size: string | "Reguler" }[];
   status: { inStock: boolean; availableQuantity: number };
   isDeleted: boolean;
   availableFor: {

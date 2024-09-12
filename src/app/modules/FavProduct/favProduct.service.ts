@@ -10,13 +10,13 @@ import httpStatus from "http-status";
 
 const addFavProductIntoDb = async (
   data: {
-    products: Types.ObjectId;
-    customerId: Types.ObjectId;
+    product: Types.ObjectId;
+    customerEmail: string;
   },
   userData: JwtPayload & IAuthUserInfo
 ) => {
   //checking user
-  const getUser = await Customer.findById(data.customerId);
+  const getUser = await Customer.findOne({ email: data.customerEmail });
   if (getUser?.email !== userData.userEmail) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
@@ -30,7 +30,7 @@ const addFavProductIntoDb = async (
 
   if (
     existingFavProduct &&
-    existingFavProduct.products.includes(data.products)
+    existingFavProduct.products.includes(data.product)
   ) {
     throw new AppError(
       httpStatus.CONFLICT, // HTTP status code for conflict
@@ -42,7 +42,7 @@ const addFavProductIntoDb = async (
     {
       customerId: getUser?._id,
     },
-    { $addToSet: { products: data.products } },
+    { $addToSet: { products: data.product } },
     { upsert: true, new: true }
   );
   return result;

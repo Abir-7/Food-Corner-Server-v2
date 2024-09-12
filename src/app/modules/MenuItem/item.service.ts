@@ -14,6 +14,7 @@ const getAllItemFromDB = async () => {
 };
 
 const getSingleItemFromDB = async (id: string) => {
+  console.log(id);
   const isProductExist = await Product.isProductExist(id);
   if (!isProductExist) {
     throw new AppError(

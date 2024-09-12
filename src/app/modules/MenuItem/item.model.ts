@@ -13,7 +13,7 @@ const productSchema = new Schema<IProduct, ProductModel>(
     description: {
       type: String,
       required: [true, "Description is required"],
-      minlength: [10, "Description must be at least 10 characters long"],
+      minlength: [5, "Description must be at least 10 characters long"],
     },
     category: {
       type: String,
@@ -46,7 +46,7 @@ const productSchema = new Schema<IProduct, ProductModel>(
           min: [0, "Price must be a positive number"],
         },
         size: {
-          type: Schema.Types.Mixed,
+          type: String,
           // Allows both number and string ("reguler")
           required: [true, "Size is required"],
         },

@@ -17,12 +17,16 @@ export const zodProductSchema = z.object({
     }),
     price: z.array(
       z.object({
-        price: z.number({
-          required_error: "Price is required.",
-          invalid_type_error: "Price must be number.",
-        }),
+        price: z
+          .string({
+            required_error: "Price is required.",
+            invalid_type_error: "Price must be number.",
+          })
+          .regex(/^\d+$/, {
+            message: "Price must be a number.",
+          }),
         size: z.union([
-          z.number({
+          z.string({
             required_error: "Size is required.",
             invalid_type_error: "Size must be number.",
           }),
@@ -36,10 +40,14 @@ export const zodProductSchema = z.object({
     }),
     status: z.object({
       inStock: z.boolean().optional(),
-      availableQuantity: z.number({
-        required_error: "Quantity is Required",
-        invalid_type_error: "Quantity must be string",
-      }),
+      availableQuantity: z
+        .string({
+          required_error: "Quantity is Required",
+          invalid_type_error: "Quantity must be string",
+        })
+        .regex(/^\d+$/, {
+          message: "Quantity must be a number.",
+        }),
     }),
     availableFor: z.object({
       Breakfast: z.boolean({
