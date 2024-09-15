@@ -5,7 +5,7 @@ import validateRequest from "../../middlewares/zodValidator";
 import { zodFavProductSchema } from "./favProduct.zodValidation";
 
 const router = Router();
-
+//role base route
 router.post(
   "/add-fav-Product",
   auth("customer"),
@@ -13,5 +13,6 @@ router.post(
   favProductController.addFavProduct
 );
 router.get("/", auth("customer"), favProductController.getUsersFavItem);
+router.delete("/:id", auth("customer"), favProductController.removeFavItem);
 
 export const favProductRouter = router;

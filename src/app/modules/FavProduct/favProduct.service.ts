@@ -56,7 +56,22 @@ const getUsersFavItemFromDb = async (userData: JwtPayload & IAuthUserInfo) => {
   return result;
 };
 
+const removeFavItemFromDb = async (
+  userData: JwtPayload & IAuthUserInfo,
+  pId: string
+) => {
+  const getCustomer = await Customer.findOne({ email: userData.userEmail });
+  const result = await FavouriteProduct.updateOne(
+    { customerId: getCustomer?._id },
+    { $pull: { products: pId } }
+  )
+    .populate("products")
+    .populate("customerId");
+  return result;
+};
+
 export const favProductService = {
   addFavProductIntoDb,
   getUsersFavItemFromDb,
+  removeFavItemFromDb,
 };

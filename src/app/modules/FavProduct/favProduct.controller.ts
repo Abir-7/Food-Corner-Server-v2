@@ -29,7 +29,22 @@ const getUsersFavItem = catchAsync(async (req, res) => {
   });
 });
 
+const removeFavItem = catchAsync(async (req, res) => {
+  const id = req.params.id;
+  const result = await favProductService.removeFavItemFromDb(
+    req.user as JwtPayload & IAuthUserInfo,
+    id
+  );
+  sendResponse(res, {
+    data: result,
+    statusCode: 200,
+    success: true,
+    message: "Item removed from favourite list",
+  });
+});
+
 export const favProductController = {
   addFavProduct,
   getUsersFavItem,
+  removeFavItem,
 };

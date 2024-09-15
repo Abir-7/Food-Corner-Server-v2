@@ -58,7 +58,7 @@ const productSchema = new Schema<IProduct, ProductModel>(
         default: true,
       },
       availableQuantity: {
-        type: Number,
+        type: Schema.Types.Mixed,
         required: [true, "Available Quantity is required"],
       },
     },
