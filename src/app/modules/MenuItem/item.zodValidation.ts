@@ -5,59 +5,52 @@ export const zodProductSchema = z.object({
   body: z.object({
     title: z.string({
       required_error: "Product title is required.",
-      invalid_type_error: "Product title must be string.",
+      invalid_type_error: "Product title must be a string.",
     }),
     description: z.string({
       required_error: "Product description is required.",
-      invalid_type_error: "Product description must be string.",
+      invalid_type_error: "Product description must be a string.",
     }),
     category: z.enum(productCategory, {
       required_error: "Category is required.",
-      invalid_type_error: "Category must be string.",
+      invalid_type_error: "Category must be one of 'Rice' or 'Kabab'.",
     }),
     price: z.array(
       z.object({
-        price: z
-          .string({
-            required_error: "Price is required.",
-            invalid_type_error: "Price must be number.",
-          })
-          .regex(/^\d+$/, {
-            message: "Price must be a number.",
-          }),
+        price: z.number({
+          required_error: "Price is required.",
+          invalid_type_error: "Price must be a number.",
+        }),
         size: z.string({
           required_error: "Size is required.",
-          invalid_type_error: "Size must be number.",
+          invalid_type_error: "Size must be a string.",
         }),
       })
     ),
     cuisine: z.string({
       required_error: "Cuisine is required.",
-      invalid_type_error: "Cuisine must be string.",
+      invalid_type_error: "Cuisine must be a string.",
     }),
-    status: z.object({
-      inStock: z.boolean().optional(),
-      availableQuantity: z.union(
-        [
-          z
-            .number()
-            .nonnegative({
-              message: "Available quantity must be a non-negative number",
-            }),
-          z.literal("nolimit"),
-        ],
-        { message: "Available quantity must be a number or 'nolimit'" }
-      ),
-    }),
+
     availableFor: z.object({
-      Breakfast: z.boolean({
+      breakfast: z.boolean({
         required_error: "Breakfast availability is required.",
       }),
-      Dinner: z.boolean({
+      lunch: z.boolean({
+        required_error: "Lunch availability is required.",
+      }),
+      dinner: z.boolean({
         required_error: "Dinner availability is required.",
       }),
-      Lunch: z.boolean({
-        required_error: "Lunch availability is required.",
+    }),
+    photo: z.string({
+      required_error: "Photo URL is required.",
+      invalid_type_error: "Photo must be a string.",
+    }),
+    limitedStatus: z.object({
+      quantity: z.number({
+        required_error: "Quantity is required.",
+        invalid_type_error: "Quantity must be a number.",
       }),
     }),
   }),

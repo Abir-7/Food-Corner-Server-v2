@@ -5,7 +5,7 @@ export interface IProduct {
   description: string;
   category: "Rice" | "Kabab";
   price: { price: number; size: string }[];
-  status: { inStock: boolean; availableQuantity: number | "nolimit" };
+  inStock: boolean;
   isDeleted: boolean;
   availableFor: {
     breakfast: boolean;
@@ -14,6 +14,7 @@ export interface IProduct {
   };
   photo: string;
   cuisine: string;
+  limitedStatus: { quantity: number; isLimited: boolean };
 }
 
 export interface ProductModel extends Model<IProduct> {

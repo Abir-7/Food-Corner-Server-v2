@@ -25,17 +25,17 @@ const productSchema = new Schema<IProduct, ProductModel>(
       required: [true, "Photo is required"],
     },
     availableFor: {
-      Breakfast: {
+      breakfast: {
         type: Boolean,
         required: [true, "Breakfast availability is required"],
       },
-      Dinner: {
-        type: Boolean,
-        required: [true, "Dinner availability is required"],
-      },
-      Lunch: {
+      lunch: {
         type: Boolean,
         required: [true, "Lunch availability is required"],
+      },
+      dinner: {
+        type: Boolean,
+        required: [true, "Dinner availability is required"],
       },
     },
     price: [
@@ -47,26 +47,35 @@ const productSchema = new Schema<IProduct, ProductModel>(
         },
         size: {
           type: String,
-          // Allows both number and string ("reguler")
           required: [true, "Size is required"],
         },
       },
     ],
-    status: {
-      inStock: {
-        type: Boolean,
-        default: true,
+    inStock: {
+      type: Boolean,
+      default: true,
+    },
+    limitedStatus: {
+      quantity: {
+        type: Number,
+        required: [true, "Quantity is required"],
+        default: null, // Use null to represent "nolimit" logically
+        min: [0, "Quantity must be a positive number"],
       },
-      availableQuantity: {
-        type: Schema.Types.Mixed,
-        required: [true, "Available Quantity is required"],
+      isLimited: {
+        type: Boolean,
+        required: [true, "Is Limited is required"],
+        default: false,
       },
     },
     cuisine: {
       type: String,
       required: [true, "Cuisine is required"],
     },
-    isDeleted: { type: Boolean, default: false },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
