@@ -5,43 +5,56 @@ const orderSchema = new Schema(
   {
     customerId: {
       type: Schema.Types.ObjectId,
-      required: [true, "Customer ID is required."],
+      required: [true, "Customer ID is required"],
       ref: "Customer",
     },
     items: [
       {
         productId: {
           type: Schema.Types.ObjectId,
-          required: [true, "At least one item is required."],
+          required: [true, "Product ID is required"],
           ref: "Products",
         },
         quantity: {
           type: Number,
-          required: true,
+          required: [true, "Quantity is required"],
         },
-        _id: false,
+        size: {
+          type: String,
+          required: [true, "Size is required"],
+        },
       },
     ],
     transectionId: {
       type: String,
-      required: [true, "Transaction ID is required."],
+      required: [true, "Transaction ID is required"],
     },
-    totalPrice: {
-      type: Number,
-      required: [true, "Total price is required."],
+    total: {
+      totalPrice: {
+        type: Number,
+        required: [true, "Total price is required"],
+      },
+      discount: {
+        type: Number,
+        required: [true, "Discount is required"],
+      },
+      subTotal: {
+        type: Number,
+        required: [true, "Subtotal is required"],
+      },
     },
     isCancel: {
       type: Boolean,
-      required: [true, "Cancellation status is required."],
       default: false,
     },
-    status: {
+    paymentStatus: {
       type: String,
-      enum: {
-        values: ["pending", "onGoing", "delivered"],
-        message: "Status must be either 'pending', 'onGoing', or 'delivered'.",
-      },
-      required: [true, "Order status is required."],
+      enum: ["paid", "processing"],
+      default: "processing",
+    },
+    delivaryStatus: {
+      type: String,
+      enum: ["pending", "onGoing", "delivered"],
       default: "pending",
     },
   },

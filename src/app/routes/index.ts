@@ -6,6 +6,7 @@ import { customerRoute } from "../modules/Customers/customer.route";
 import { orderRouter } from "../modules/Order/order.route";
 import { favProductRouter } from "../modules/FavProduct/favProduct.route";
 import { ratingRouter } from "../modules/Rating/rating.route";
+import { paymentRouter } from "../modules/Order/payment/payment.route";
 
 const router = Router();
 
@@ -14,7 +15,8 @@ const moduleRoutes = [
   { path: "/user", route: userRouter },
   { path: "/customer", route: customerRoute },
   { path: "/auth", route: authRouter },
-  { path: "/payment", route: orderRouter },
+  { path: "/order", route: orderRouter },
+  { path: "/payment", route: paymentRouter },
   { path: "/favProduct", route: favProductRouter },
   { path: "/user-rating", route: ratingRouter },
 ];

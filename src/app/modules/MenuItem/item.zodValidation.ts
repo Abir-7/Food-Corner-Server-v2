@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { productAvailableFor, productCategory } from "./item.const";
+import { productCategory } from "./item.const";
 
 export const zodProductSchema = z.object({
   body: z.object({
@@ -58,33 +58,47 @@ export const zodProductSchema = z.object({
 
 export const zodProductUpdateSchema = z.object({
   body: z.object({
-    title: z
-      .string({
-        required_error: "Product title is required.",
-        invalid_type_error: "Product title must be string.",
-      })
-      .optional(),
-    description: z
-      .string({
-        required_error: "Product description is required.",
-        invalid_type_error: "Product description must be string.",
-      })
-      .optional(),
-    category: z.enum(productCategory).optional(),
-    price: z.number().optional(),
-    status: z
+    limitedStatus: z
       .object({
-        inStock: z
-          .boolean({ invalid_type_error: "InStock must be a boolean" })
-          .optional(),
-        availableQuantity: z
-          .number({
-            required_error: "Quantity is required",
-            invalid_type_error: "Quantity must be a number",
-          })
-          .optional(),
+        quantity: z.number({
+          required_error: "Quantity is required.",
+          invalid_type_error: "Quantity must be a number.",
+        }),
       })
       .optional(),
-    availableFor: z.enum(productAvailableFor).optional(),
+    photo: z
+      .string({
+        required_error: "Photo URL is required.",
+        invalid_type_error: "Photo must be a string.",
+      })
+      .optional(),
+    availableFor: z
+      .object({
+        breakfast: z.boolean({
+          required_error: "Breakfast availability is required.",
+        }),
+        lunch: z.boolean({
+          required_error: "Lunch availability is required.",
+        }),
+        dinner: z.boolean({
+          required_error: "Dinner availability is required.",
+        }),
+      })
+      .optional(),
+    price: z
+      .array(
+        z.object({
+          price: z.number({
+            required_error: "Price is required.",
+            invalid_type_error: "Price must be a number.",
+          }),
+          size: z.string({
+            required_error: "Size is required.",
+            invalid_type_error: "Size must be a string.",
+          }),
+        })
+      )
+      .optional(),
   }),
+  inStock: z.boolean().optional(),
 });

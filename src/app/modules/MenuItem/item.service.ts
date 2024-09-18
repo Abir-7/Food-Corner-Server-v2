@@ -14,7 +14,6 @@ const getAllItemFromDB = async () => {
 };
 
 const getSingleItemFromDB = async (id: string) => {
-  console.log(id);
   const isProductExist = await Product.isProductExist(id);
   if (!isProductExist) {
     throw new AppError(
@@ -42,11 +41,11 @@ const updateItemFromDB = async (id: string, data: Partial<IProduct>) => {
     );
   }
 
-  const { status, ...remainData } = data;
+  const { limitedStatus, ...remainData } = data;
   const modifiedData: Record<string, unknown> = { ...remainData };
-  if (status && Object.keys(status).length) {
-    for (const [key, value] of Object.entries(status)) {
-      modifiedData[`status.${key}`] = value;
+  if (limitedStatus && Object.keys(limitedStatus).length) {
+    for (const [key, value] of Object.entries(limitedStatus)) {
+      modifiedData[`limitedStatus.${key}`] = value;
     }
   }
 

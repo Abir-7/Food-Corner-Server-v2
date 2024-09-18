@@ -5,7 +5,10 @@ import { orderService } from "./order.service";
 import { IAuthUserInfo } from "../../interface/global.interface";
 
 const orderProduct = catchAsync(async (req, res) => {
-  const result = await orderService.createOrderIntoDB(req.body);
+  const result = await orderService.createOrderIntoDB(
+    req.body,
+    req.user as JwtPayload & { role: string; userEmail: string }
+  );
   sendResponse(res, {
     data: result,
     statusCode: 200,

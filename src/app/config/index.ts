@@ -8,4 +8,7 @@ export default {
   MONGO_DB_URI: process.env.MONGO_DB_URI,
   JWT_ACCESS_SECRET: process.env.JWT_ACCESS_SECRET,
   JWT_ACCESS_EXPIRES_IN: process.env.JWT_ACCESS_EXPIRES_IN,
+  Signature_Key: process.env.Signature_Key,
+  Store_ID: process.env.Store_ID,
+  Api_EndPoint: process.env.Api_EndPoint,
 };

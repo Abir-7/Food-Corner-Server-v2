@@ -4,7 +4,7 @@ import { auth } from "../../middlewares/auth/auth";
 
 const router = Router();
 
-router.post("/make-payment", orderController.orderProduct);
+router.post("/make-payment", auth("customer"), orderController.orderProduct);
 router.get("/", orderController.getAllorder);
 router.get("/myOrder", auth("customer"), orderController.getUsersAllOrder);
 export const orderRouter = router;

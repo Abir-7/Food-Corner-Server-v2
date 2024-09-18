@@ -7,13 +7,14 @@
     "build": "tsc",
     "start:dev": "ts-node-dev --respawn --transpile-only ./src/server.ts",
     "start:prod": "node ./dist/server.js",
-    "lint":"npx eslint ./src"
+    "lint": "npx eslint ./src"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
     "@eslint/js": "^9.9.0",
+    "axios": "^1.7.7",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
