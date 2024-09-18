@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import catchAsync from "../../../utils/catchAsync";
+
 import { Order } from "../order.model";
 
 export const paymentConfirm = catchAsync(async (req, res) => {
@@ -8,15 +9,19 @@ export const paymentConfirm = catchAsync(async (req, res) => {
   const orderData: any = await Order.findById(id)
     .populate({
       path: "customerId",
-      select: "name email", // Select customer fields
+      select: "name email",
     })
     .populate({
       path: "items.productId",
-      select: "title photo", // Select product fields
+      select: "title photo",
     });
 
   if (!orderData) {
     return res.status(404).send("<h1>Booking not found</h1>");
+  }
+  if (orderData) {
+    orderData.paymentStatus = "paid";
+    orderData.save();
   }
 
   // Extract user details
@@ -28,7 +33,6 @@ export const paymentConfirm = catchAsync(async (req, res) => {
   // Map product details
   const products = orderData.items
     .map((item: any) => {
-      console.log(item);
       return `<div style="margin-bottom: 20px; display: flex; gap: 15px;">
       <div style="flex: 1;">
         <p><strong>Product Name:</strong> ${item.productId.title} <br> 
@@ -110,7 +114,7 @@ export const paymentConfirm = catchAsync(async (req, res) => {
                 <p>Your order has been <span class="highlight">confirmed</span> with the following details:</p>
                 <p><strong>User Email:</strong> ${userEmail}</p>
                 ${products}
-                <p><strong>Subtotal:</strong> $${subTotal}</p>
+                <p><strong>Subtotal:</strong> ${subTotal} tk</p>
                 <p>Thank you for shopping with us. We hope to see you again!</p>
             </div>
             <div class="footer">
