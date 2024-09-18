@@ -118,7 +118,7 @@ export const paymentConfirm = catchAsync(async (req, res) => {
                 <p>Thank you for shopping with us. We hope to see you again!</p>
             </div>
             <div class="footer">
-                &copy; 2024 Food-Corner. All rights reserved. <a  style=" color: white;font-weight: bold;" href='https://chipper-longma-698a80.netlify.app'>Home</a>
+                &copy; 2024 Food-Corner. All rights reserved. <a  style=" color: white;font-weight: bold;" href='http://localhost:5173'>Home</a>
             </div>
         </div>
     </body>
