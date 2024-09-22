@@ -15,5 +15,5 @@ export interface IOrder {
   };
   isCancel: boolean;
   paymentStatus: "paid" | "processing";
-  delivaryStatus: "pending" | "onGoing" | "delivered";
+  deliveryStatus: "pending" | "onGoing" | "delivered";
 }

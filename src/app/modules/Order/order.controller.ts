@@ -18,12 +18,36 @@ const orderProduct = catchAsync(async (req, res) => {
 });
 
 const getAllorder = catchAsync(async (req, res) => {
-  const result = await orderService.getAllOrderFromDB();
+  const query = req.query;
+
+  const result = await orderService.getAllOrderFromDB(query);
   sendResponse(res, {
     data: result,
     statusCode: 200,
     success: true,
     message: "All Order is fetched successfully",
+  });
+});
+const getPendingOrder = catchAsync(async (req, res) => {
+  const result = await orderService.getAllPendingOrderFromDB();
+  sendResponse(res, {
+    data: result,
+    statusCode: 200,
+    success: true,
+    message: "All Pending Orders are fetched successfully",
+  });
+});
+
+const updateOrder = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  const result = await orderService.updateOrderFromDB(id, status);
+  sendResponse(res, {
+    data: result,
+    statusCode: 200,
+    success: true,
+    message: "Order is updated successfully",
   });
 });
 
@@ -42,4 +66,6 @@ export const orderController = {
   orderProduct,
   getAllorder,
   getUsersAllOrder,
+  getPendingOrder,
+  updateOrder,
 };

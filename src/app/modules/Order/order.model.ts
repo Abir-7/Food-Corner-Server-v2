@@ -52,7 +52,7 @@ const orderSchema = new Schema(
       enum: ["paid", "processing"],
       default: "processing",
     },
-    delivaryStatus: {
+    deliveryStatus: {
       type: String,
       enum: ["pending", "onGoing", "delivered"],
       default: "pending",
