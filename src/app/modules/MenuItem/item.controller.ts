@@ -1,10 +1,10 @@
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
-import { productService } from "./item.service";
+import { itemService } from "./item.service";
 
 const createItem = catchAsync(async (req, res) => {
   const data = req.body;
-  const result = await productService.createItemIntoDB(data);
+  const result = await itemService.createItemIntoDB(data);
   sendResponse(res, {
     data: result,
     statusCode: 200,
@@ -15,8 +15,7 @@ const createItem = catchAsync(async (req, res) => {
 
 const getAllItem = catchAsync(async (req, res) => {
   const queries = req.query;
-
-  const result = await productService.getAllItemFromDB(queries);
+  const result = await itemService.getAllItemFromDB(queries);
   sendResponse(res, {
     data: result.result,
     statusCode: 200,
@@ -28,7 +27,7 @@ const getAllItem = catchAsync(async (req, res) => {
 
 const getSingleItem = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const result = await productService.getSingleItemFromDB(id);
+  const result = await itemService.getSingleItemFromDB(id);
   sendResponse(res, {
     data: result,
     statusCode: 200,
@@ -40,7 +39,7 @@ const getSingleItem = catchAsync(async (req, res) => {
 const updateItem = catchAsync(async (req, res) => {
   const { id } = req.params;
   const data = req.body;
-  const result = await productService.updateItemFromDB(id, data);
+  const result = await itemService.updateItemFromDB(id, data);
   sendResponse(res, {
     data: result,
     statusCode: 200,
@@ -51,7 +50,8 @@ const updateItem = catchAsync(async (req, res) => {
 
 const deleteItem = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const result = await productService.deleteItemFromDB(id);
+
+  const result = await itemService.deleteItemFromDB(id);
   sendResponse(res, {
     data: result,
     statusCode: 200,
@@ -60,10 +60,21 @@ const deleteItem = catchAsync(async (req, res) => {
   });
 });
 
-export const productController = {
+const timeBasedItem = catchAsync(async (req, res) => {
+  const result = await itemService.timeBasedItemFromDB();
+  sendResponse(res, {
+    data: result,
+    statusCode: 200,
+    success: true,
+    message: "Time Based Products are fetched successfully",
+  });
+});
+
+export const itemController = {
   deleteItem,
   createItem,
   getAllItem,
   updateItem,
   getSingleItem,
+  timeBasedItem,
 };

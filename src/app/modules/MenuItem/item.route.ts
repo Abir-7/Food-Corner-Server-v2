@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { productController } from "./item.controller";
+import { itemController } from "./item.controller";
 
 import { zodProductSchema, zodProductUpdateSchema } from "./item.zodValidation";
 import validateRequest from "../../middlewares/zodValidator";
@@ -11,18 +11,20 @@ router.post(
   "/add-item",
   auth("admin"),
   validateRequest(zodProductSchema),
-  productController.createItem
+  itemController.createItem
 );
 router.patch(
   "/:id",
   auth("admin"),
   validateRequest(zodProductUpdateSchema),
-  productController.updateItem
+  itemController.updateItem
 );
-router.delete("/:id", auth("admin"), productController.deleteItem);
+router.delete("/:id", auth("admin"), itemController.deleteItem);
 
 //public route
-router.get("/:id", productController.getSingleItem);
-router.get("/", productController.getAllItem);
+
+router.get("/", itemController.getAllItem);
+router.get("/time-based", itemController.timeBasedItem);
+router.get("/:id", itemController.getSingleItem);
 
 export const productRouter = router;

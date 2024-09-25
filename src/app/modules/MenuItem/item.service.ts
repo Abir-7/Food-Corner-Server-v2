@@ -3,6 +3,7 @@ import { AppError } from "../../Errors/AppError";
 import { IProduct } from "./item.interface";
 import { Product } from "./item.model";
 import QueryBuilder from "../../builder/QueryBuilder";
+import { preprocessQueries } from "../../utils/processedQueries";
 
 const createItemIntoDB = async (productData: IProduct) => {
   const result = await Product.create(productData);
@@ -10,10 +11,11 @@ const createItemIntoDB = async (productData: IProduct) => {
 };
 
 const getAllItemFromDB = async (queries: Record<string, unknown>) => {
-  // Create a QueryBuilder instance
+  const newQuery = preprocessQueries(queries);
+  console.log(newQuery);
   const menuItemQuery = new QueryBuilder(
     Product.find({ isDeleted: false }),
-    queries
+    newQuery
   )
     .search(["title", "description"])
     .filter()
@@ -95,10 +97,37 @@ const deleteItemFromDB = async (id: string) => {
   return result;
 };
 
-export const productService = {
+const timeBasedItemFromDB = async () => {
+  const currentTime = new Date().getHours();
+  const availableTime = {
+    breakfast: false,
+    lunch: false,
+    dinner: false,
+  };
+  let query = {};
+  if (currentTime >= 7 && currentTime < 10) {
+    query = { "availableFor.breakfast": true };
+    availableTime.breakfast = true;
+  } else if (currentTime >= 10 && currentTime < 16) {
+    query = { "availableFor.lunch": true };
+    availableTime.lunch = true;
+  } else if (currentTime >= 16 && currentTime < 23) {
+    query = { "availableFor.dinner": true };
+    availableTime.dinner = true;
+  } else {
+    // 11pm to 7am, show any data
+    query = {};
+  }
+  const result = await Product.find(query).limit(4);
+
+  return { result, availableTime };
+};
+
+export const itemService = {
   createItemIntoDB,
   getAllItemFromDB,
   updateItemFromDB,
   deleteItemFromDB,
   getSingleItemFromDB,
+  timeBasedItemFromDB,
 };
