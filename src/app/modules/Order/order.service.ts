@@ -32,29 +32,31 @@ const createOrderIntoDB = async (
   return { ...result, payLink: paymentInfo.data.payment_url };
 };
 const getAllOrderFromDB = async (queryParams: Record<string, unknown>) => {
-  const modelQuery = Order.find() // Create the base query for Order
-    .populate({
-      path: "customerId",
-      select: "name contactNo email address",
-    })
-    .populate({
-      path: "items.productId",
-      select: "title price category photo",
-    });
-  const results = await new QueryBuilder(modelQuery, queryParams)
+  const allOrderQuery = new QueryBuilder(
+    Order.find() // Create the base query for Order
+      .populate({
+        path: "customerId",
+        select: "name contactNo email address",
+      })
+      .populate({
+        path: "items.productId",
+        select: "title price category photo",
+      }),
+    queryParams
+  )
     .search(["transectionId"]) // Replace with searchable fields
     .filter()
-    .priceRange() // If applicable
     .sort()
-    .paginate()
-    .fields()
-    .modelQuery.exec();
+    .paginate();
 
-  return results;
+  const results = await allOrderQuery.modelQuery;
+  const meta = await allOrderQuery.countTotal();
+  return { results, meta };
 };
 const getAllPendingOrderFromDB = async () => {
   const result = await Order.find({
     deliveryStatus: { $ne: "delivered" },
+    isCancel: false,
   })
     .sort({ createdAt: -1 })
     .populate({
@@ -108,20 +110,65 @@ const updateOrderFromDB = async (id: string, status: string) => {
     { deliveryStatus: status },
     { new: true } // To return the updated document
   );
-
   return result;
 };
 
-const getUsersOrderFromDB = async (userdata: JwtPayload & IAuthUserInfo) => {
+const getUsersOrderFromDB = async (
+  userdata: JwtPayload & IAuthUserInfo,
+  queryParams: Record<string, unknown>
+) => {
   const userEmail = userdata.userEmail;
   const customer = await Customer.findOne({ email: userEmail });
-  const result = await Order.find({ customerId: customer?._id })
-    .populate({
-      path: "customerId",
-      select: "name contactNo email address ",
-    })
-    .populate({ path: "items.productId", select: "title price category" });
-  return result;
+
+  const allOrderQuery = new QueryBuilder(
+    Order.find({ customerId: customer?._id }) // Create the base query for Order
+      .populate({
+        path: "customerId",
+        select: "name contactNo email address",
+      })
+      .populate({
+        path: "items.productId",
+        select: "title price category photo",
+      }),
+    queryParams
+  )
+    .search(["transectionId"]) // Replace with searchable fields
+    .filter()
+    .sort()
+    .paginate();
+
+  const results = await allOrderQuery.modelQuery;
+  const meta = await allOrderQuery.countTotal();
+  return { results, meta };
+};
+
+const getUsersPendingOrderFromDB = async (
+  userdata: JwtPayload & IAuthUserInfo,
+  queryParams: Record<string, unknown>
+) => {
+  const userEmail = userdata.userEmail;
+  const customer = await Customer.findOne({ email: userEmail });
+
+  const allOrderQuery = new QueryBuilder(
+    Order.find({ customerId: customer?._id, deliveryStatus: "pending" }) // Create the base query for Order
+      .populate({
+        path: "customerId",
+        select: "name contactNo email address",
+      })
+      .populate({
+        path: "items.productId",
+        select: "title price category photo",
+      }),
+    queryParams
+  )
+    .search(["transectionId"]) // Replace with searchable fields
+    .filter()
+    .sort()
+    .paginate();
+
+  const results = await allOrderQuery.modelQuery;
+  const meta = await allOrderQuery.countTotal();
+  return { results, meta };
 };
 
 export const orderService = {
@@ -130,4 +177,5 @@ export const orderService = {
   getUsersOrderFromDB,
   getAllPendingOrderFromDB,
   updateOrderFromDB,
+  getUsersPendingOrderFromDB,
 };

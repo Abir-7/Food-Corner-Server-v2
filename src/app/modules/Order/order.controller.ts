@@ -22,10 +22,11 @@ const getAllorder = catchAsync(async (req, res) => {
 
   const result = await orderService.getAllOrderFromDB(query);
   sendResponse(res, {
-    data: result,
+    data: result.results,
     statusCode: 200,
     success: true,
     message: "All Order is fetched successfully",
+    meta: result.meta,
   });
 });
 const getPendingOrder = catchAsync(async (req, res) => {
@@ -52,13 +53,28 @@ const updateOrder = catchAsync(async (req, res) => {
 });
 
 const getUsersAllOrder = catchAsync(async (req, res) => {
+  const query = req.query;
   const userData = req.user as JwtPayload & IAuthUserInfo;
-  const result = await orderService.getUsersOrderFromDB(userData);
+  const result = await orderService.getUsersOrderFromDB(userData, query);
   sendResponse(res, {
-    data: result,
+    data: result.results,
     statusCode: 200,
     success: true,
     message: "User Orders are fetched successfully",
+    meta: result.meta,
+  });
+});
+
+const getUsersAllPendingOrder = catchAsync(async (req, res) => {
+  const query = req.query;
+  const userData = req.user as JwtPayload & IAuthUserInfo;
+  const result = await orderService.getUsersPendingOrderFromDB(userData, query);
+  sendResponse(res, {
+    data: result.results,
+    statusCode: 200,
+    success: true,
+    message: "User Pending Orders are fetched successfully",
+    meta: result.meta,
   });
 });
 
@@ -68,4 +84,5 @@ export const orderController = {
   getUsersAllOrder,
   getPendingOrder,
   updateOrder,
+  getUsersAllPendingOrder,
 };

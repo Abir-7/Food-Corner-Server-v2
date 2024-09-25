@@ -14,12 +14,15 @@ const createItem = catchAsync(async (req, res) => {
 });
 
 const getAllItem = catchAsync(async (req, res) => {
-  const result = await productService.getAllItemFromDB();
+  const queries = req.query;
+
+  const result = await productService.getAllItemFromDB(queries);
   sendResponse(res, {
-    data: result,
+    data: result.result,
     statusCode: 200,
     success: true,
     message: "All Product are fetched successfully",
+    meta: result.meta,
   });
 });
 

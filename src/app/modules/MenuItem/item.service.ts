@@ -2,15 +2,36 @@ import httpStatus from "http-status";
 import { AppError } from "../../Errors/AppError";
 import { IProduct } from "./item.interface";
 import { Product } from "./item.model";
+import QueryBuilder from "../../builder/QueryBuilder";
 
 const createItemIntoDB = async (productData: IProduct) => {
   const result = await Product.create(productData);
   return result;
 };
 
-const getAllItemFromDB = async () => {
-  const result = await Product.find({ isDeleted: false });
-  return result;
+const getAllItemFromDB = async (queries: Record<string, unknown>) => {
+  // Create a QueryBuilder instance
+  const menuItemQuery = new QueryBuilder(
+    Product.find({ isDeleted: false }),
+    queries
+  )
+    .search(["title", "description"])
+    .filter()
+    .priceRange()
+    .sort()
+    .paginate();
+
+  // Execute the query
+  const result = await menuItemQuery.modelQuery;
+
+  // Optionally, get pagination details (if you need to return these as well)
+  const meta = await menuItemQuery.countTotal();
+
+  // Return the result and pagination details if needed
+  return {
+    result,
+    meta, // Optional: only if you want to return pagination info
+  };
 };
 
 const getSingleItemFromDB = async (id: string) => {

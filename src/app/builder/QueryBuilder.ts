@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { FilterQuery, Query } from "mongoose";
 
 class QueryBuilder<T> {
@@ -48,14 +49,38 @@ class QueryBuilder<T> {
   }
 
   priceRange() {
-    const minPrice = Number(this?.query?.minPrice);
-    const maxPrice = Number(this?.query?.maxPrice);
+    const minPrice = Number(this.query.minPrice);
+    const maxPrice = Number(this.query.maxPrice);
 
-    if (!isNaN(minPrice) || !isNaN(maxPrice)) {
+    // Create a price condition object
+    const priceConditions = {} as Record<any, unknown>;
+
+    if (minPrice > 0) {
+      priceConditions.$gte = minPrice; // Greater than or equal to minPrice
+    }
+
+    if (maxPrice > 0) {
+      priceConditions.$lte = maxPrice; // Less than or equal to maxPrice
+    }
+
+    // If there are conditions, update modelQuery
+    if (Object.keys(priceConditions).length > 0) {
       this.modelQuery = this.modelQuery.find({
-        price: {
-          ...(isNaN(minPrice) ? {} : { $gte: minPrice }),
-          ...(isNaN(maxPrice) ? {} : { $lte: maxPrice }),
+        $expr: {
+          $and: [
+            {
+              $gte: [
+                { $arrayElemAt: ["$price.price", 0] },
+                priceConditions.$gte || 0,
+              ],
+            },
+            {
+              $lte: [
+                { $arrayElemAt: ["$price.price", 0] },
+                priceConditions.$lte || Infinity,
+              ],
+            },
+          ],
         },
       });
     }
@@ -64,10 +89,19 @@ class QueryBuilder<T> {
   }
 
   sort() {
-    const sort =
+    // Extract and format the sort string
+    const sortField =
       (this?.query?.sort as string)?.split(",")?.join(" ") || "-createdAt";
+
+    // Check if sorting by price is requested
+    const sort = sortField.includes("price")
+      ? sortField.replace("price", "price.0.price")
+      : sortField;
+
+    // Apply the sort to the Mongoose query
     this.modelQuery = this.modelQuery.sort(sort as string);
 
+    // Return this for chaining
     return this;
   }
 
