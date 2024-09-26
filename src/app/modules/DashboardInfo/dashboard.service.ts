@@ -2,9 +2,6 @@ import { JwtPayload } from "jsonwebtoken";
 import { Order } from "../Order/order.model";
 import { User } from "../Users/user.model";
 import { Customer } from "../Customers/custommer.model";
-import { IOrder } from "../Order/order.interface";
-import { AppError } from "../../Errors/AppError";
-import httpStatus from "http-status";
 
 export const adminDashboardInfoFromDB = async () => {
   const currentDate = new Date();
@@ -139,30 +136,13 @@ export const userDashboardInfoFromDB = async (
 
   const userId = userData._id;
 
-  // Set up date ranges
-  const now = new Date();
-  const cutoffTime = new Date(now.getTime() - 24 * 60 * 60 * 1000); // 24 hours ago
-  const presentOrderStatus = (await Order.findOne({
-    customerId: userId,
-  })
-    .sort("-createdAt")
-    .select("createdAt deliveryStatus")
-    .lean()) as IOrder & { createdAt: Date };
-
-  if (!presentOrderStatus) {
-    throw new AppError(httpStatus.BAD_REQUEST, "Orders not found");
-  }
-
-  const createdAt = new Date(presentOrderStatus.createdAt);
-  const endOf12Hours = new Date(createdAt.getTime() + 12 * 60 * 60 * 1000); // Adds 12 hours
-
   // Fetch data in parallel to optimize queries
   const [pendingOrderCount, totalOrders, presentOrders, lastOrders] =
     await Promise.all([
       // Count pending orders
       Order.countDocuments({
         customerId: userId,
-        deliveryStatus: "pending",
+        deliveryStatus: { $ne: "delivered" },
       }),
 
       // Count total orders
@@ -170,13 +150,10 @@ export const userDashboardInfoFromDB = async (
         customerId: userId,
       }),
 
-      // Find orders within the last 12 hours from the most recent order
+      //find present order that was not delivered
       Order.find({
-        createdAt: {
-          $gte: createdAt,
-          $lt: endOf12Hours,
-        },
         customerId: userId,
+        deliveryStatus: { $ne: "delivered" },
       })
         .sort("-createdAt")
         .populate({
@@ -185,18 +162,23 @@ export const userDashboardInfoFromDB = async (
         })
         .lean(),
 
-      // Find past orders delivered before the last 24 hours
+      //last order that is delivered
       Order.findOne({
         deliveryStatus: "delivered",
-        createdAt: { $lte: cutoffTime },
         customerId: userId,
       })
         .populate({
           path: "items.productId",
           select: "title photo",
         })
+        .sort("-createdAt")
         .lean(),
     ]);
 
-  return { pendingOrderCount, totalOrders, presentOrders, lastOrders };
+  return {
+    pendingOrderCount,
+    totalOrders,
+    presentOrders,
+    lastOrders,
+  };
 };

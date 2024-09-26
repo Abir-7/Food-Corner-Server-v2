@@ -22,6 +22,11 @@ const ratingSchema = new Schema<IRating>(
       required: [true, "Customer ID is required"],
       ref: "Customer",
     },
+    orderId: {
+      type: Schema.Types.ObjectId,
+      required: [true, "Order ID is required"],
+      ref: "Orders",
+    },
   },
   {
     timestamps: true, // Automatically manage createdAt and updatedAt fields

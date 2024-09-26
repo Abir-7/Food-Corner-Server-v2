@@ -76,9 +76,23 @@ const productSchema = new Schema<IProduct, ProductModel>(
       type: Boolean,
       default: false,
     },
+    rating: {
+      averageRating: {
+        type: Number,
+        default: 0,
+      },
+      ratingCount: {
+        type: Number,
+        default: 0,
+      },
+    },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
+
+// Virtual field for average rating
 
 productSchema.statics.isProductExist = async function (id: string) {
   const existingProduct = await Product.findOne({ _id: id });

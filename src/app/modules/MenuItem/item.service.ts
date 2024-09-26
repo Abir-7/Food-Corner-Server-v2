@@ -12,7 +12,7 @@ const createItemIntoDB = async (productData: IProduct) => {
 
 const getAllItemFromDB = async (queries: Record<string, unknown>) => {
   const newQuery = preprocessQueries(queries);
-  console.log(newQuery);
+
   const menuItemQuery = new QueryBuilder(
     Product.find({ isDeleted: false }),
     newQuery
@@ -23,16 +23,13 @@ const getAllItemFromDB = async (queries: Record<string, unknown>) => {
     .sort()
     .paginate();
 
-  // Execute the query
   const result = await menuItemQuery.modelQuery;
 
-  // Optionally, get pagination details (if you need to return these as well)
   const meta = await menuItemQuery.countTotal();
 
-  // Return the result and pagination details if needed
   return {
     result,
-    meta, // Optional: only if you want to return pagination info
+    meta,
   };
 };
 

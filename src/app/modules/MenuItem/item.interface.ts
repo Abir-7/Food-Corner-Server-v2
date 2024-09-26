@@ -15,6 +15,7 @@ export interface IProduct {
   photo: string;
   cuisine: string;
   limitedStatus: { quantity: number; isLimited: boolean };
+  rating: { averageRating: number; ratingCount: number };
 }
 
 export interface ProductModel extends Model<IProduct> {
