@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { productCategory } from "./item.const";
 
 export const zodProductSchema = z.object({
   body: z.object({
@@ -11,9 +10,9 @@ export const zodProductSchema = z.object({
       required_error: "Product description is required.",
       invalid_type_error: "Product description must be a string.",
     }),
-    category: z.enum(productCategory, {
+    category: z.string({
       required_error: "Category is required.",
-      invalid_type_error: "Category must be one of 'Rice' or 'Kabab'.",
+      invalid_type_error: "Category must be a string (ObjectId).",
     }),
     price: z.array(
       z.object({
@@ -47,12 +46,16 @@ export const zodProductSchema = z.object({
       required_error: "Photo URL is required.",
       invalid_type_error: "Photo must be a string.",
     }),
-    limitedStatus: z.object({
-      quantity: z.number({
-        required_error: "Quantity is required.",
-        invalid_type_error: "Quantity must be a number.",
-      }),
-    }),
+    limitedStatus: z
+      .object({
+        quantity: z
+          .number({
+            required_error: "Quantity is required.",
+            invalid_type_error: "Quantity must be a number.",
+          })
+          .optional(),
+      })
+      .optional(),
   }),
 });
 

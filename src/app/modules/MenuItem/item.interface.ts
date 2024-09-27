@@ -1,9 +1,9 @@
 import { Model } from "mongoose";
-
+import { Types } from "mongoose";
 export interface IProduct {
   title: string;
   description: string;
-  category: "Rice" | "Kabab";
+  category: Types.ObjectId;
   price: { price: number; size: string }[];
   inStock: boolean;
   isDeleted: boolean;
@@ -13,7 +13,7 @@ export interface IProduct {
     dinner: boolean;
   };
   photo: string;
-  cuisine: string;
+  cuisine: Types.ObjectId;
   limitedStatus: { quantity: number; isLimited: boolean };
   rating: { averageRating: number; ratingCount: number };
 }

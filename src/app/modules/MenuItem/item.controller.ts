@@ -69,6 +69,15 @@ const timeBasedItem = catchAsync(async (req, res) => {
     message: "Time Based Products are fetched successfully",
   });
 });
+const ratingBasedItem = catchAsync(async (req, res) => {
+  const result = await itemService.ratingBasedItemFromDB();
+  sendResponse(res, {
+    data: result,
+    statusCode: 200,
+    success: true,
+    message: "Rating Based Products are fetched successfully",
+  });
+});
 
 export const itemController = {
   deleteItem,
@@ -77,4 +86,5 @@ export const itemController = {
   updateItem,
   getSingleItem,
   timeBasedItem,
+  ratingBasedItem,
 };

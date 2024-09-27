@@ -1,6 +1,5 @@
 import { model, Schema } from "mongoose";
 import { IProduct, ProductModel } from "./item.interface";
-import { productCategory } from "./item.const";
 
 const productSchema = new Schema<IProduct, ProductModel>(
   {
@@ -16,9 +15,9 @@ const productSchema = new Schema<IProduct, ProductModel>(
       minlength: [5, "Description must be at least 10 characters long"],
     },
     category: {
-      type: String,
-      enum: productCategory,
+      type: Schema.Types.ObjectId,
       required: [true, "Category is required"],
+      ref: "Categories",
     },
     photo: {
       type: String,
@@ -58,9 +57,7 @@ const productSchema = new Schema<IProduct, ProductModel>(
     limitedStatus: {
       quantity: {
         type: Number,
-        required: [true, "Quantity is required"],
-        default: null, // Use null to represent "nolimit" logically
-        min: [0, "Quantity must be a positive number"],
+        default: null,
       },
       isLimited: {
         type: Boolean,
@@ -69,8 +66,9 @@ const productSchema = new Schema<IProduct, ProductModel>(
       },
     },
     cuisine: {
-      type: String,
+      type: Schema.Types.ObjectId,
       required: [true, "Cuisine is required"],
+      ref: "Cuisines",
     },
     isDeleted: {
       type: Boolean,

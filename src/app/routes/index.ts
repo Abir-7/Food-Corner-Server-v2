@@ -8,6 +8,7 @@ import { favProductRouter } from "../modules/FavProduct/favProduct.route";
 import { ratingRouter } from "../modules/Rating/rating.route";
 import { paymentRouter } from "../modules/Order/payment/payment.route";
 import { dashboardRouter } from "../modules/DashboardInfo/dashboard.route";
+import { optionRouter } from "../modules/CategoryCuisineOption/option.route";
 
 const router = Router();
 
@@ -21,6 +22,7 @@ const moduleRoutes = [
   { path: "/favProduct", route: favProductRouter },
   { path: "/user-rating", route: ratingRouter },
   { path: "/dashboard", route: dashboardRouter },
+  { path: "/option", route: optionRouter },
 ];
 
 moduleRoutes.forEach((route) => router.use(route.path, route.route));

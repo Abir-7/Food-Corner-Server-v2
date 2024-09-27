@@ -14,7 +14,7 @@ const getAllItemFromDB = async (queries: Record<string, unknown>) => {
   const newQuery = preprocessQueries(queries);
 
   const menuItemQuery = new QueryBuilder(
-    Product.find({ isDeleted: false }),
+    Product.find({ isDeleted: false }).populate("cuisine").populate("category"),
     newQuery
   )
     .search(["title", "description"])
@@ -48,7 +48,9 @@ const getSingleItemFromDB = async (id: string) => {
       "The Product you are searching is already deleted"
     );
   }
-  const result = await Product.findOne({ _id: id });
+  const result = await Product.findOne({ _id: id })
+    .populate("cuisine")
+    .populate("category");
   return result;
 };
 
@@ -120,6 +122,16 @@ const timeBasedItemFromDB = async () => {
   return { result, availableTime };
 };
 
+const ratingBasedItemFromDB = async () => {
+  const result = await Product.find({
+    "rating.averageRating": { $gte: 4.5 },
+  })
+    .sort({ "rating.averageRating": -1 })
+    .limit(4);
+
+  return result;
+};
+
 export const itemService = {
   createItemIntoDB,
   getAllItemFromDB,
@@ -127,4 +139,5 @@ export const itemService = {
   deleteItemFromDB,
   getSingleItemFromDB,
   timeBasedItemFromDB,
+  ratingBasedItemFromDB,
 };

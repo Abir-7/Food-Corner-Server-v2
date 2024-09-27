@@ -24,6 +24,7 @@ router.delete("/:id", auth("admin"), itemController.deleteItem);
 //public route
 
 router.get("/", itemController.getAllItem);
+router.get("/rating-based", itemController.ratingBasedItem);
 router.get("/time-based", itemController.timeBasedItem);
 router.get("/:id", itemController.getSingleItem);
 
