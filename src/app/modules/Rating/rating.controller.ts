@@ -37,8 +37,32 @@ const userRating = catchAsync(async (req, res) => {
   });
 });
 
+const addRatingUs = catchAsync(async (req, res) => {
+  const data = req.body;
+  const auth = req.user as JwtPayload & IAuthUserInfo;
+  const result = await ratingService.createRatingUsIntoDb(data, auth);
+  sendResponse(res, {
+    data: result,
+    statusCode: 200,
+    success: true,
+    message: "Rating is given.",
+  });
+});
+
+const getAllRatingUs = catchAsync(async (req, res) => {
+  const result = await ratingService.getRatingUsFromDb();
+  sendResponse(res, {
+    data: result,
+    statusCode: 200,
+    success: true,
+    message: "Ratingus are fetched successfully.",
+  });
+});
+
 export const ratingController = {
   addRating,
   allRating,
   userRating,
+  addRatingUs,
+  getAllRatingUs,
 };

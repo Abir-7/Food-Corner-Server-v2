@@ -1,6 +1,6 @@
 import { JwtPayload } from "jsonwebtoken";
 import { IRating } from "./rating.interface";
-import { Rating } from "./rating.model";
+import { Rating, RatingUs } from "./rating.model";
 import { IAuthUserInfo } from "../../interface/global.interface";
 import { Customer } from "../Customers/custommer.model";
 import { AppError } from "../../Errors/AppError";
@@ -76,8 +76,30 @@ const userRatingFromDb = async (auth: JwtPayload & IAuthUserInfo) => {
   return result;
 };
 
+const createRatingUsIntoDb = async (
+  data: { rating: number; comment: string },
+  auth: JwtPayload & IAuthUserInfo
+) => {
+  const customer = await Customer.findOne({ email: auth.userEmail });
+
+  if (!customer) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Customar Not Found");
+  }
+
+  const result = await RatingUs.create({ ...data, customer: customer?._id });
+  return result;
+};
+
+const getRatingUsFromDb = async () => {
+  const result = await RatingUs.find().populate("customer").sort("-createdAt");
+  console.log(JSON.stringify(result));
+  return result;
+};
+
 export const ratingService = {
   addRatingIntoDb,
   allRatingFromDb,
   userRatingFromDb,
+  createRatingUsIntoDb,
+  getRatingUsFromDb,
 };

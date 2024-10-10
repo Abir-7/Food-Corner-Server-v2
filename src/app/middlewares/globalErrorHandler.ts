@@ -31,6 +31,18 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     errorSources = errorData.errorSources;
     message = errorData.message;
     statusCode = errorData.statusCode;
+  } else if (
+    err instanceof Error &&
+    err.message === "TokenExpiredError: jwt expired"
+  ) {
+    statusCode = 401;
+    message = err.message;
+    errorSources = [
+      {
+        path: "",
+        message: err.message,
+      },
+    ];
   } else if (err instanceof Error) {
     message = err.message;
     errorSources = [
