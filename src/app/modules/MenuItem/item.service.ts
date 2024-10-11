@@ -4,6 +4,7 @@ import { IProduct } from "./item.interface";
 import { Product } from "./item.model";
 import QueryBuilder from "../../builder/QueryBuilder";
 import { preprocessQueries } from "../../utils/processedQueries";
+import mongoose from "mongoose";
 
 const createItemIntoDB = async (productData: IProduct) => {
   const result = await Product.create(productData);
@@ -48,10 +49,39 @@ const getSingleItemFromDB = async (id: string) => {
       "The Product you are searching is already deleted"
     );
   }
-  const result = await Product.findOne({ _id: id })
-    .populate("cuisine")
-    .populate("category");
-  return result;
+
+  // const result = await Product.findOne({ _id: id })
+  //   .populate("cuisine")
+  //   .populate("category");
+
+  const result2 = await Product.aggregate([
+    {
+      $match: { _id: new mongoose.Types.ObjectId(id) },
+    },
+    {
+      $lookup: {
+        from: "ratings", // Lookup from the ratings collection
+        localField: "_id", // Match product ID
+        foreignField: "product", // Foreign field in the ratings collection
+        as: "productFeedback", // Output as productFeedback
+        pipeline: [
+          {
+            $lookup: {
+              from: "customers", // Lookup from the customers collection
+              localField: "customer", // Field in the ratings collection
+              foreignField: "_id", // Match with customer ID in the customers collection
+              as: "customer", // Overwrite the customer field
+            },
+          },
+          {
+            $unwind: "$customer", // Unwind to get individual customer object
+          },
+        ],
+      },
+    },
+  ]);
+  console.log(JSON.stringify(result2), "ff");
+  return result2[0];
 };
 
 const updateItemFromDB = async (id: string, data: Partial<IProduct>) => {

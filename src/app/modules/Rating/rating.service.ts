@@ -92,7 +92,6 @@ const createRatingUsIntoDb = async (
 
 const getRatingUsFromDb = async () => {
   const result = await RatingUs.find().populate("customer").sort("-createdAt");
-  console.log(JSON.stringify(result));
   return result;
 };
 
