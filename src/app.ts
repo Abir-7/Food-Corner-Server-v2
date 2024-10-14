@@ -11,7 +11,11 @@ app.use(express.json());
 app.use(cookiePerser());
 
 const corsOptions = {
-  origin: ["http://localhost:5173"],
+  origin: [
+    "http://localhost:5173",
+    "https://food-corner-v2.netlify.app",
+    "https://food-corner-back-end-mern.vercel.app",
+  ],
   methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,

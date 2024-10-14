@@ -7,6 +7,7 @@ import { AppError } from "../../Errors/AppError";
 import httpStatus from "http-status";
 import { Product } from "../MenuItem/item.model";
 import mongoose from "mongoose";
+import { User } from "../Users/user.model";
 
 const addRatingIntoDb = async (
   data: IRating,
@@ -91,8 +92,15 @@ const createRatingUsIntoDb = async (
 };
 
 const getRatingUsFromDb = async () => {
+  const totalCustomer = await User.find({
+    isBlocked: false,
+    role: "customer",
+  }).estimatedDocumentCount();
+  const totalMenu = await Product.find({
+    isDeleted: false,
+  }).estimatedDocumentCount();
   const result = await RatingUs.find().populate("customer").sort("-createdAt");
-  return result;
+  return { result, totalCustomer, totalMenu };
 };
 
 export const ratingService = {

@@ -9,6 +9,7 @@ import { ratingRouter } from "../modules/Rating/rating.route";
 import { paymentRouter } from "../modules/Order/payment/payment.route";
 import { dashboardRouter } from "../modules/DashboardInfo/dashboard.route";
 import { optionRouter } from "../modules/CategoryCuisineOption/option.route";
+import { contactRouter } from "../modules/ContactMessage/contact.route";
 
 const router = Router();
 
@@ -23,6 +24,7 @@ const moduleRoutes = [
   { path: "/user-rating", route: ratingRouter },
   { path: "/dashboard", route: dashboardRouter },
   { path: "/option", route: optionRouter },
+  { path: "/message", route: contactRouter },
 ];
 
 moduleRoutes.forEach((route) => router.use(route.path, route.route));

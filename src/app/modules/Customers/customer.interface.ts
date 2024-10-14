@@ -19,6 +19,7 @@ export interface ICustomerUpdate {
   contactNo: number;
   address: string;
   name: Iname;
+  image: string;
 }
 
 export interface CustomerModel extends Model<ICustomer> {
