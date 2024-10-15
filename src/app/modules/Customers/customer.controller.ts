@@ -5,9 +5,9 @@ import { customerService } from "./customer.service";
 import { IAuthUserInfo } from "../../interface/global.interface";
 
 const updateCustomer = catchAsync(async (req, res) => {
-  const { email } = req.params;
+  const userData = req.user as JwtPayload & IAuthUserInfo;
   const data = req.body;
-  const result = await customerService.updateCustomerFromDB(email, data);
+  const result = await customerService.updateCustomerFromDB(userData, data);
 
   sendResponse(res, {
     data: result,
@@ -17,20 +17,6 @@ const updateCustomer = catchAsync(async (req, res) => {
   });
 });
 
-const getCustomerInfo = catchAsync(async (req, res) => {
-  const userData = req.user as JwtPayload & IAuthUserInfo;
-
-  const result = await customerService.getCustomerInfoFromDb(userData);
-
-  sendResponse(res, {
-    data: result,
-    statusCode: 200,
-    success: true,
-    message: "Customer info is fetched successfully",
-  });
-});
-
 export const customerController = {
   updateCustomer,
-  getCustomerInfo,
 };

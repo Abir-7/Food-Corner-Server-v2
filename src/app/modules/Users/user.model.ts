@@ -27,12 +27,16 @@ export const userSchema = new Schema<IUser>(
     role: {
       type: String,
       enum: {
-        values: ["customer", "admin", "delivary-man"],
+        values: ["customer", "admin", "delivary-man", "superAdmin"],
         message: "Role must be either customer, admin, or delivary-man",
       },
       default: "customer",
     },
     isBlocked: {
+      type: Boolean,
+      default: false,
+    },
+    isDeleted: {
       type: Boolean,
       default: false,
     },

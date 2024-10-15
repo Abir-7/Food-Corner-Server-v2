@@ -8,6 +8,8 @@ import { AppError } from "../../Errors/AppError";
 import httpStatus from "http-status";
 import { IAdmin } from "../Admin/admin.interface";
 import { Admin } from "../Admin/admin.model";
+import { JwtPayload } from "jsonwebtoken";
+import { IAuthUserInfo } from "../../interface/global.interface";
 
 const createCustomerIntoDb = async (data: ICustomer, password: string) => {
   const user: Partial<IUser> = {};
@@ -79,4 +81,21 @@ const createAdminIntoDb = async (data: IAdmin, password: string) => {
   }
 };
 
-export const userService = { createCustomerIntoDb, createAdminIntoDb };
+const getUserInfoFromDb = async (userData: JwtPayload & IAuthUserInfo) => {
+  const user = await User.findOne({ email: userData?.userEmail });
+  if (user?.role === "customer") {
+    const result = await Customer.findOne({ email: userData.userEmail });
+    return result;
+  } else if (user?.role === "admin") {
+    const result = await Admin.findOne({ email: userData.userEmail });
+    return result;
+  } else {
+    throw new AppError(httpStatus.BAD_REQUEST, "You are not Admin or Customer");
+  }
+};
+
+export const userService = {
+  createCustomerIntoDb,
+  createAdminIntoDb,
+  getUserInfoFromDb,
+};

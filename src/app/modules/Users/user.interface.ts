@@ -1,6 +1,6 @@
 import User_Role from "./user.constant";
 
-export type IUserRole = "customer" | "admin" | "delivary-man";
+export type IUserRole = "customer" | "admin" | "delivary-man" | "superAdmin";
 export interface IUser {
   id: string;
   email: string;
@@ -8,6 +8,7 @@ export interface IUser {
   passwordChangeAt?: Date;
   role: IUserRole;
   isBlocked: boolean;
+  isDeleted: boolean;
 }
 
 export type TUserRole = keyof typeof User_Role;

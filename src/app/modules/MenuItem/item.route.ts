@@ -9,17 +9,17 @@ const router = Router();
 //role based route
 router.post(
   "/add-item",
-  auth("admin"),
+  auth("admin", "superAdmin"),
   validateRequest(zodProductSchema),
   itemController.createItem
 );
 router.patch(
   "/:id",
-  auth("admin"),
+  auth("admin", "superAdmin"),
   validateRequest(zodProductUpdateSchema),
   itemController.updateItem
 );
-router.delete("/:id", auth("admin"), itemController.deleteItem);
+router.delete("/:id", auth("admin", "superAdmin"), itemController.deleteItem);
 
 //public route
 

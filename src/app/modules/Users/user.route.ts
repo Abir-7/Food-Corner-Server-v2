@@ -4,6 +4,7 @@ import validateRequest from "../../middlewares/zodValidator";
 
 import { zodCustomerSchema } from "../Customers/customer.zodValidation";
 import { zodAdminSchema } from "../Admin/admin.zodValidation";
+import { auth } from "../../middlewares/auth/auth";
 
 const router = Router();
 
@@ -17,4 +18,7 @@ router.post(
   validateRequest(zodAdminSchema),
   userController.createAdmin
 );
+
+router.get("/me", auth("customer", "admin"), userController.getUserInfo);
+
 export const userRouter = router;

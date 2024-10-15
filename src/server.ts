@@ -4,7 +4,7 @@ import app from "./app";
 import config from "./app/config";
 import seedSuperAdmin from "./app/DB/superAdmin";
 
-main().catch((err) => console.log(err, "gg"));
+main().catch((err) => console.log(err, "main"));
 
 async function main() {
   await mongoose.connect(config.MONGO_DB_URI as string);

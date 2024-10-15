@@ -17,36 +17,32 @@ export const auth = (...userRoles: TUserRole[]) => {
       throw new AppError(httpStatus.UNAUTHORIZED, "You are not authorized!");
     }
 
-    try {
-      const decoded = jwt.verify(
-        token,
-        config.JWT_ACCESS_SECRET as string
-      ) as JwtPayload;
+    const decoded = jwt.verify(
+      token,
+      config.JWT_ACCESS_SECRET as string
+    ) as JwtPayload;
 
-      const { role, userEmail } = decoded as JwtPayload;
+    const { role, userEmail } = decoded as JwtPayload;
 
-      // checking if the user is exist
-      const user = await User.findOne({ email: userEmail });
-      if (!user) {
-        throw new AppError(httpStatus.NOT_FOUND, "This user is not found!");
-      }
-
-      // checking if the user is already deleted
-
-      const isBlocked = user?.isBlocked;
-
-      if (isBlocked) {
-        throw new AppError(httpStatus.FORBIDDEN, "This user is Blocked!");
-      }
-
-      if (userRoles && !userRoles.includes(role)) {
-        throw new AppError(httpStatus.UNAUTHORIZED, "You are not authorized!!");
-      }
-
-      req.user = decoded as JwtPayload & { userEmail: string; role: string };
-      next();
-    } catch (error: any) {
-      throw new Error(error);
+    // checking if the user is exist
+    const user = await User.findOne({ email: userEmail });
+    if (!user) {
+      throw new AppError(httpStatus.NOT_FOUND, "This user is not found!");
     }
+
+    // checking if the user is already deleted
+
+    const isBlocked = user?.isBlocked;
+
+    if (isBlocked) {
+      throw new AppError(httpStatus.FORBIDDEN, "This user is Blocked!");
+    }
+
+    if (userRoles && !userRoles.includes(role)) {
+      throw new AppError(401, "You are not authorized!!!");
+    }
+
+    req.user = decoded as JwtPayload & { userEmail: string; role: string };
+    next();
   });
 };

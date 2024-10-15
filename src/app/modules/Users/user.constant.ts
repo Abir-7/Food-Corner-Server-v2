@@ -1,4 +1,5 @@
 const User_Role = {
+  superAdmin: "superAdmin",
   admin: "admin",
   customer: "customer",
   delivaryMan: "delivary-man",

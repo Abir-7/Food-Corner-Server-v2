@@ -14,9 +14,13 @@ router.get(
 );
 
 //admin route
-router.get("/", auth("admin"), orderController.getAllorder);
+router.get("/", auth("admin", "superAdmin"), orderController.getAllorder);
 
-router.get("/pending", auth("admin"), orderController.getPendingOrder);
-router.patch("/:id", auth("admin"), orderController.updateOrder);
+router.get(
+  "/pending",
+  auth("admin", "superAdmin"),
+  orderController.getPendingOrder
+);
+router.patch("/:id", auth("admin", "superAdmin"), orderController.updateOrder);
 
 export const orderRouter = router;

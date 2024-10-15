@@ -59,10 +59,6 @@ export const adminSchema = new Schema<IAdmin>({
     type: String,
     required: [true, "Address is required"],
   },
-  isDeleted: {
-    type: Boolean,
-    default: false,
-  },
 });
 
 export const Admin = model<IAdmin>("Admin", adminSchema);

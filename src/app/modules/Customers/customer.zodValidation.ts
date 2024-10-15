@@ -39,3 +39,16 @@ export const zodCustomerSchema = z.object({
     }),
   }),
 });
+
+export const customerUpdateSchema = z.object({
+  contactNo: z.number().optional(),
+  address: z.string().optional(),
+  name: z
+    .object({
+      firstName: z.string().optional(),
+      lastName: z.string().optional(),
+      middleName: z.string().optional(),
+    })
+    .optional(),
+  image: z.string().optional(),
+});

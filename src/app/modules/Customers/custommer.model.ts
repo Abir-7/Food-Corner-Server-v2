@@ -25,6 +25,9 @@ export const customerSchema = new Schema<ICustomer, CustomerModel>({
       trim: true,
     },
   },
+  photo: {
+    type: String,
+  },
   contactNo: {
     type: Number,
     required: [true, "Contact number is required."],

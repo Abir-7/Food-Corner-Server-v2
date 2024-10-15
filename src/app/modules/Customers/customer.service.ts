@@ -6,10 +6,10 @@ import { IAuthUserInfo } from "../../interface/global.interface";
 import { JwtPayload } from "jsonwebtoken";
 
 const updateCustomerFromDB = async (
-  email: string,
+  userData: JwtPayload & IAuthUserInfo,
   data: Partial<ICustomerUpdate>
 ) => {
-  const customerData = await Customer.isCustomerExist(email);
+  const customerData = await Customer.isCustomerExist(userData?.userEmail);
   if (!customerData) {
     throw new AppError(httpStatus.NOT_FOUND, "User not found to update");
   }
@@ -27,7 +27,7 @@ const updateCustomerFromDB = async (
   }
 
   const result = await Customer.findOneAndUpdate(
-    { email },
+    { email: customerData?.email },
     modifiedUpdatedData,
     {
       new: true,
@@ -36,12 +36,6 @@ const updateCustomerFromDB = async (
   return result;
 };
 
-const getCustomerInfoFromDb = async (userData: JwtPayload & IAuthUserInfo) => {
-  const result = await Customer.findOne({ email: userData.userEmail });
-  return result;
-};
-
 export const customerService = {
   updateCustomerFromDB,
-  getCustomerInfoFromDb,
 };
