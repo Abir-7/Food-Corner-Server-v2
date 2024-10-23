@@ -39,6 +39,10 @@ export const zodAdminSchema = z.object({
         required_error: "Contact number is required",
         invalid_type_error: "Contact number must be a string",
       }),
+      photo: z.string({
+        required_error: "Photo is required",
+        invalid_type_error: "Photo must be a string",
+      }),
       address: z.string({
         required_error: "Address is required",
         invalid_type_error: "Address must be a string",

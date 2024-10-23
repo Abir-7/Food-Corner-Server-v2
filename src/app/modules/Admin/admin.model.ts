@@ -59,6 +59,10 @@ export const adminSchema = new Schema<IAdmin>({
     type: String,
     required: [true, "Address is required"],
   },
+  photo: {
+    type: String,
+    required: [true, "Photo is required"],
+  },
 });
 
 export const Admin = model<IAdmin>("Admin", adminSchema);

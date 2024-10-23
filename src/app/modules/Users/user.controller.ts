@@ -18,13 +18,14 @@ const createCustomer = catchAsync(async (req, res) => {
 
 const createAdmin = catchAsync(async (req, res) => {
   const { password, admin } = req.body;
-  const result = await userService.createAdminIntoDb(admin, password);
+  const authData = req.user as JwtPayload & { userEmail: string; role: string };
+  const result = await userService.createAdminIntoDb(admin, password, authData);
 
   sendResponse(res, {
     data: result,
     statusCode: 200,
     success: true,
-    message: "User Created Successfully",
+    message: "Admin Created Successfully",
   });
 });
 

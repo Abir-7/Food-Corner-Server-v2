@@ -15,4 +15,5 @@ export interface IAdmin {
   gender: TGender;
   contactNo: string;
   address: string;
+  photo: string;
 }

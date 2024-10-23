@@ -46,8 +46,18 @@ const createCustomerIntoDb = async (data: ICustomer, password: string) => {
   }
 };
 
-const createAdminIntoDb = async (data: IAdmin, password: string) => {
+const createAdminIntoDb = async (
+  data: IAdmin,
+  password: string,
+  authData: JwtPayload & { userEmail: string; role: string }
+) => {
   const user: Partial<IUser> = {};
+
+  const isSuperUser = await User.findOne({ email: authData.userEmail });
+
+  if (isSuperUser?.role !== "superAdmin") {
+    throw new AppError(httpStatus.BAD_REQUEST, "You can not create admin");
+  }
 
   const session = await mongoose.startSession();
 
@@ -56,6 +66,7 @@ const createAdminIntoDb = async (data: IAdmin, password: string) => {
     user.id = "Admin" + "-" + (await generateId()); //create Id function
     user.email = data.email;
     user.password = password;
+    user.role = "admin";
     const userData = await User.create([user], { session });
 
     if (!userData.length) {
