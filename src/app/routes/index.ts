@@ -11,6 +11,7 @@ import { dashboardRouter } from "../modules/DashboardInfo/dashboard.route";
 import { optionRouter } from "../modules/CategoryCuisineOption/option.route";
 import { contactRouter } from "../modules/ContactMessage/contact.route";
 import { adminRouter } from "../modules/Admin/admin.route";
+import { newsLetterRouter } from "../modules/NewsLetter/newletter.router";
 
 const router = Router();
 
@@ -27,6 +28,7 @@ const moduleRoutes = [
   { path: "/option", route: optionRouter },
   { path: "/message", route: contactRouter },
   { path: "/admin", route: adminRouter },
+  { path: "/newsletter", route: newsLetterRouter },
 ];
 
 moduleRoutes.forEach((route) => router.use(route.path, route.route));

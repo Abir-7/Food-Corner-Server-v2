@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import catchAsync from "../../../utils/catchAsync";
+import { NewsLetter } from "../../NewsLetter/newsletter.model";
 
 import { Order } from "../order.model";
 
@@ -29,6 +30,13 @@ export const paymentConfirm = catchAsync(async (req, res) => {
     orderData.customerId.name.middleName ?? ""
   } ${orderData.customerId.name.lastName}`;
   const userEmail = orderData.customerId.email;
+
+  const newsLetter = await NewsLetter.findOne({ userEmail: userEmail });
+
+  if (newsLetter) {
+    newsLetter.isDiscountApplied = true;
+    newsLetter.save();
+  }
 
   // Map product details
   const products = orderData.items
@@ -118,7 +126,7 @@ export const paymentConfirm = catchAsync(async (req, res) => {
                 <p>Thank you for shopping with us. We hope to see you again!</p>
             </div>
             <div class="footer">
-                &copy; 2024 Food-Corner. All rights reserved. <a  style=" color: white;font-weight: bold;" href='http://localhost:5173'>Home</a>
+                &copy; 2024 Food-Corner. All rights reserved. <a  style=" color: white;font-weight: bold;" href='https://food-corner-v2.netlify.app'>Home</a>
             </div>
         </div>
     </body>
