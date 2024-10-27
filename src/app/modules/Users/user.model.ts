@@ -4,7 +4,7 @@ import { AppError } from "../../Errors/AppError";
 import httpStatus from "http-status";
 import bcrypt from "bcrypt";
 import config from "../../config";
-import crypto from "crypto";
+
 export const userSchema = new Schema<IUser>(
   {
     id: {
@@ -70,11 +70,5 @@ userSchema.pre("save", async function (next) {
 userSchema.post("save", async function (data) {
   data.password = "**********************";
 });
-
-userSchema.methods.generateVerificationToken = function () {
-  const token = crypto.randomBytes(32).toString("hex");
-  this.verificationToken = token;
-  return token;
-};
 
 export const User = model<IUser>("User", userSchema);

@@ -21,6 +21,7 @@ const createCustomerIntoDb = async (data: ICustomer, password: string) => {
     user.id = await generateId(); //create Id function
     user.email = data.email;
     user.password = password;
+
     const userData = await User.create([user], { session });
 
     if (!userData.length) {
