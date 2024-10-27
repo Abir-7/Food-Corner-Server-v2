@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // utils/mailer.ts
 import nodemailer, { Transporter } from "nodemailer";

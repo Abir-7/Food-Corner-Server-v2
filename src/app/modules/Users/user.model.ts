@@ -1,6 +1,10 @@
 import { model, Schema } from "mongoose";
 import { IUser } from "./user.interface";
-
+import { AppError } from "../../Errors/AppError";
+import httpStatus from "http-status";
+import bcrypt from "bcrypt";
+import config from "../../config";
+import crypto from "crypto";
 export const userSchema = new Schema<IUser>(
   {
     id: {
@@ -40,8 +44,37 @@ export const userSchema = new Schema<IUser>(
       type: Boolean,
       default: false,
     },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+    },
   },
   { timestamps: true }
 );
+
+userSchema.pre("save", async function (next) {
+  const isUserExist = await User.findOne({ email: this.email });
+  if (isUserExist) {
+    throw new AppError(httpStatus.CONFLICT, "User already exist");
+  }
+  this.password = await bcrypt.hash(
+    this.password,
+    Number(config.bcrypt_sault_round)
+  );
+  next();
+});
+
+userSchema.post("save", async function (data) {
+  data.password = "**********************";
+});
+
+userSchema.methods.generateVerificationToken = function () {
+  const token = crypto.randomBytes(32).toString("hex");
+  this.verificationToken = token;
+  return token;
+};
 
 export const User = model<IUser>("User", userSchema);

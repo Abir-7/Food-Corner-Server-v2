@@ -9,6 +9,8 @@ export interface IUser {
   role: IUserRole;
   isBlocked: boolean;
   isDeleted: boolean;
+  isVerified: boolean;
+  verificationToken: string;
 }
 
 export type TUserRole = keyof typeof User_Role;

@@ -13,4 +13,5 @@ export default {
   Api_EndPoint: process.env.Api_EndPoint,
   email_pass: process.env.EMAIL_PASS,
   user_email: process.env.EMAIL_USER,
+  bcrypt_sault_round: process.env.BCRYPT_SALT_ROUND,
 };
