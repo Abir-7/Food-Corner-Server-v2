@@ -22,4 +22,8 @@ router.post(
 
 router.get("/me", auth("customer", "admin"), userController.getUserInfo);
 
+//email verification
+
+router.get("/verify-email", userController.verifyEmail);
+
 export const userRouter = router;

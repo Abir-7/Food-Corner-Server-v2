@@ -13,6 +13,7 @@ import { AppError } from "../Errors/AppError";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
+  console.log(err);
   let statusCode = 500;
   let message = "Internal server error";
   let errorSources: IErrorSource[] = [

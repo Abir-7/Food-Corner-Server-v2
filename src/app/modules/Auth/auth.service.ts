@@ -16,6 +16,10 @@ const userLogin = async (data: ILoginUser) => {
     );
   }
 
+  if (isUserExist.isVerified == false) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Please verify your email.");
+  }
+
   if (isUserExist.password !== data.password) {
     throw new AppError(httpStatus.NOT_FOUND, "Password not match..");
   }

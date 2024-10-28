@@ -10,6 +10,8 @@ import { IAdmin } from "../Admin/admin.interface";
 import { Admin } from "../Admin/admin.model";
 import { JwtPayload } from "jsonwebtoken";
 import { IAuthUserInfo } from "../../interface/global.interface";
+import { userVerificationToken } from "../../utils/userVerificationToken";
+import { sendMail } from "../../utils/nodeMailer";
 
 const createCustomerIntoDb = async (data: ICustomer, password: string) => {
   const user: Partial<IUser> = {};
@@ -21,7 +23,7 @@ const createCustomerIntoDb = async (data: ICustomer, password: string) => {
     user.id = await generateId(); //create Id function
     user.email = data.email;
     user.password = password;
-
+    user.verificationToken = await userVerificationToken();
     const userData = await User.create([user], { session });
 
     if (!userData.length) {
@@ -35,6 +37,13 @@ const createCustomerIntoDb = async (data: ICustomer, password: string) => {
     if (!userData.length) {
       throw new AppError(httpStatus.BAD_REQUEST, "Failed to create user");
     }
+
+    await sendMail({
+      subject: "Email Verification",
+      text: "Verify Email",
+      to: userData[0].email,
+      html: `https://food-corner-back-end-mern.vercel.app/api/v1/user/verify-email?token=${userData[0].verificationToken}`,
+    });
 
     await session.commitTransaction();
     await session.endSession();
@@ -67,6 +76,7 @@ const createAdminIntoDb = async (
     user.id = "Admin" + "-" + (await generateId()); //create Id function
     user.email = data.email;
     user.password = password;
+    user.verificationToken = await userVerificationToken();
     user.role = "admin";
     const userData = await User.create([user], { session });
 
@@ -81,6 +91,13 @@ const createAdminIntoDb = async (
     if (!userData.length) {
       throw new AppError(httpStatus.BAD_REQUEST, "Failed to create admin");
     }
+
+    await sendMail({
+      subject: "Email Verification",
+      text: "Verify Email",
+      to: userData[0].email,
+      html: `https://food-corner-back-end-mern.vercel.app/api/v1/user/verify-email?token=${userData[0].verificationToken}`,
+    });
 
     await session.commitTransaction();
     await session.endSession();
