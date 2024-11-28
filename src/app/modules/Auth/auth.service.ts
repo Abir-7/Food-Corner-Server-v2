@@ -4,6 +4,7 @@ import { User } from "../Users/user.model";
 import { ILoginUser } from "./auth.interface";
 import { createToken } from "./auth.utils";
 import config from "../../config";
+import bcrypt from "bcrypt";
 
 const userLogin = async (data: ILoginUser) => {
   const isUserExist = await User.findOne({ email: data.email }).select(
@@ -16,12 +17,12 @@ const userLogin = async (data: ILoginUser) => {
     );
   }
 
-  if (isUserExist.isVerified == false) {
-    throw new AppError(httpStatus.BAD_REQUEST, "Please verify your email.");
+  if (!(await bcrypt.compare(data.password, isUserExist.password))) {
+    throw new AppError(httpStatus.NOT_FOUND, "Password not match..");
   }
 
-  if (isUserExist.password !== data.password) {
-    throw new AppError(httpStatus.NOT_FOUND, "Password not match..");
+  if (isUserExist.isVerified == false) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Please verify your email.");
   }
 
   if (isUserExist.isBlocked) {

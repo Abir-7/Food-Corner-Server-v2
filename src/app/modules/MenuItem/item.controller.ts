@@ -3,7 +3,6 @@ import sendResponse from "../../utils/sendResponse";
 import { itemService } from "./item.service";
 
 const createItem = catchAsync(async (req, res) => {
-  console.log("object1");
   const data = req.body;
   const result = await itemService.createItemIntoDB(data);
   sendResponse(res, {
@@ -16,7 +15,7 @@ const createItem = catchAsync(async (req, res) => {
 
 const getAllItem = catchAsync(async (req, res) => {
   const queries = req.query;
-  console.log("object2");
+
   const result = await itemService.getAllItemFromDB(queries);
   sendResponse(res, {
     data: result.result,
@@ -28,7 +27,6 @@ const getAllItem = catchAsync(async (req, res) => {
 });
 
 const getSingleItem = catchAsync(async (req, res) => {
-  console.log("object3");
   const { id } = req.params;
   const result = await itemService.getSingleItemFromDB(id);
   sendResponse(res, {
@@ -40,10 +38,12 @@ const getSingleItem = catchAsync(async (req, res) => {
 });
 
 const updateItem = catchAsync(async (req, res) => {
-  console.log("object4");
   const { id } = req.params;
   const data = req.body;
-  const result = await itemService.updateItemFromDB(id, data);
+
+  console.log(id, data, "menu update");
+
+  const result = ""; //await itemService.updateItemFromDB(id, data);
   sendResponse(res, {
     data: result,
     statusCode: 200,
@@ -54,7 +54,7 @@ const updateItem = catchAsync(async (req, res) => {
 
 const deleteItem = catchAsync(async (req, res) => {
   const { id } = req.params;
-  console.log("object5");
+
   const result = await itemService.deleteItemFromDB(id);
   sendResponse(res, {
     data: result,

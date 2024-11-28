@@ -80,7 +80,7 @@ const getSingleItemFromDB = async (id: string) => {
       },
     },
   ]);
-  console.log(JSON.stringify(result2), "ff");
+  //console.log(JSON.stringify(result2), "ff");
   return result2[0];
 };
 

@@ -5,6 +5,7 @@ const superUser = {
   email: "superadmin@gmail.com",
   password: "admin123",
   role: "superAdmin",
+  isVerified: true, // remove it when use real email
 };
 
 const seedSuperAdmin = async () => {
